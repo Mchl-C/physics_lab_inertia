@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title> 普物實驗5（慣量）</title>
+  <style>
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 50px;
+      font-family: Arial, sans-serif;
+      background-color: #f0f0f0;
+      margin: 0;
+      padding: 20px;
+    }
+
+    .scene-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      background: #ffffffdd;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    }
+
+    .scene-container h2 {
+      margin: 0 0 10px 0;
+    }
+
+    .scene-container p {
+      margin: 10px 0 0 0;
+      max-width: 500px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    .system1, .system2, .system3 {
+      position: relative;
+      width: 300px;
+      height: 300px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transform-style: preserve-3d;
+    }
+
+    .system2{
+        transform: rotateZ(90deg);
+    }
+
+    .system3{
+        transform: rotateZ(90deg);
+    }
+
+    .container{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #scene, #scene4 {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    @keyframes spin {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
+    }
+  </style>
+</head>
+<body>
+    <div class="scene-container">
+      <h2>Case 1: Disk(圓盤) rotating in central axis(Z axis) (I = 1/2MR²)</h2>
+      <div class="system" id="scene"></div>
+      <p>This cylinder rotates around its central axis. The moment of inertia is I = 1/2MR².</p>
+    </div>
+
+    <div class="scene-container">
+      <h2>Case 2: Disk(圓盤) rotating around X axis and Y axis </h2>
+      <div class="system2" id="scene2"></div>
+      <p>This cylinder rotated around its X axis or Y axis, the moment of inertia of Ix = Iy = 1/4 MR^2.</p>
+    </div>
+
+    <div class="scene-container">
+      <h2>Case 3: Solid Cylinder rotating around X or Y axis</h2>
+      <div class="system3" id="scene3"></div>
+      <p>The moment of inertia of Ix = Iy = 1/4 MR^2 + 1/12 ML^2 </p>
+    </div>
+
+    <div class="scene-container">
+      <h2> Ilustration of counting the integral</h2>
+      <div class="system" id="scene4"></div>
+      <p>The solid cylinder can be separated to many small disk, we add all of them together as the integral</p>
+    </div>
+
+
+  <script>
+    // 🌀 Create a 3D Cylinder Element
+    function createCylinder({
+  radius = 60,
+  height = 60,
+  diskCount = 5,
+  topColor = '#ffcc66',
+  sideColor1 = '#b66a00',
+  rotationSpeed = 4,
+  rotationAxis = 'X'
+} = {}) {
+  const cylinder = document.createElement('div');
+  cylinder.classList.add('cylinder');
+  Object.assign(cylinder.style, {
+    position: 'relative',
+    width: radius * 2 + 'px',
+    height: radius * 2 + 'px',
+    transformStyle: 'preserve-3d',
+    animation: `spin ${rotationSpeed}s linear infinite`
+  });
+
+    // Each disk is evenly spaced along the height
+      for (let i = 0; i < diskCount; i++) {
+        const disk = document.createElement('div');
+        const step = height / diskCount;
+        const yOffset = -height / 2 + i * step;  // center align vertically
+        const brightness = 1 - i / (diskCount * 1.5); // subtle shading
+
+        Object.assign(disk.style, {
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          borderRadius: '50%',
+          background: `radial-gradient(circle at 30% 30%, 
+            rgba(255,204,102,${brightness}), 
+            ${sideColor1} 80%)`,
+          transform: `rotate${rotationAxis}(89deg) translateZ(${yOffset}px)`
+        });
+
+        cylinder.appendChild(disk);
+      }
+
+      return cylinder;
+    }
+
+      class Rod {
+        constructor({
+          width = 6,
+          height = 300,
+          color1 = '#666',
+          color2 = '#999',
+          borderRadius = 3,
+          zIndex = 0
+        } = {}) {
+          this.width = width;
+          this.height = height;
+          this.color1 = color1;
+          this.color2 = color2;
+          this.borderRadius = borderRadius;
+          this.zIndex = zIndex;
+
+          this.el = document.createElement('div');
+          Object.assign(this.el.style, {
+            position: 'absolute',
+            width: `${this.width}px`,
+            height: `${this.height}px`,
+            background: `linear-gradient(to bottom, ${this.color1}, ${this.color2})`,
+            borderRadius: `${this.borderRadius}px`,
+            zIndex: this.zIndex
+          });
+        }
+
+        // Append the rod to any parent
+        appendTo(parent) {
+          parent.appendChild(this.el);
+        }
+      }
+
+    // 🧩 Example usage:
+    const scene = document.getElementById('scene');
+    const scene2 = document.getElementById('scene2');
+    const scene3 = document.getElementById('scene3');
+    const scene4 = document.getElementById('scene4');
+
+    const rod1 = new Rod({ height: 125 });
+    rod1.appendTo(scene);
+    const rod2 = new Rod({ height: 250 });
+    rod2.appendTo(scene2);
+    const rod3 = new Rod({ height: 250 });
+    rod3.appendTo(scene3);
+    const rod4 = new Rod({ height: 125 });
+    rod4.appendTo(scene4);
+
+    scene.appendChild(createCylinder({
+      radius: 60,
+      height: 10,
+      diskCount: 100,
+      topColor: '#ffcc66',
+      sideColor1: '#cc7a00',
+      rotationSpeed: 5
+    }));
+
+    scene2.appendChild(createCylinder({
+      radius: 60,
+      height: 10,
+      diskCount: 30,
+      topColor: '#ffcc66',
+      sideColor1: '#cc7a00',
+      rotationSpeed: 5,
+      rotationAxis: 'Y'
+    }));
+
+    scene3.appendChild(createCylinder({
+      radius: 60,
+      height: 60,
+      diskCount: 30,
+      topColor: '#ffcc66',
+      sideColor1: '#cc7a00',
+      rotationSpeed: 5,
+      rotationAxis: 'Z'
+    }));
+
+    scene4.appendChild(createCylinder({
+      radius: 60,
+      height: 60,
+      diskCount: 15,
+      topColor: '#ffcc66',
+      sideColor1: '#cc7a00',
+      rotationSpeed: 5,
+    }));
+
+  </script>
+</body>
+</html>
