@@ -75,6 +75,56 @@
 </head>
 <body>
     <div class="scene-container">
+      <h2> 轉動慣量(Moment of Inertia) </h2>
+      <div class="system"></div>
+      <p>衡量物體繞軸旋轉的難易度 </p>
+      <p>measure how difficult it is for an object to rotate around an axis</p>
+
+      <br>
+      <p>當剛體旋轉時，在給定時間內，剛體的每個元素都具有相同的角速度和角加速度</p>
+      <p>when a rigid body is rotating, every element of has the same angular speed and angular acceleration in given time</p>
+      
+      <br>
+      <img width= 300px src = "https://isaacscience.org/images/content/concepts/physics/figures/moment_inertia_elemental_masses_3.svg">
+      <br> 
+
+      <p>The moment of inertia of an object is the sum of all the mass multiply with distance square in every point of the object.</p>
+      <h3> I = ∑m<sub>i</sub>r<sub>i</sub><sup>2</sup></h3>
+
+      <p> To represent the amount of force required to cause something to rotate, we use torque(力矩)</p>
+      <p> Since the formula of torque is </p>
+      <h3> τ = Iα </h3>
+      <p> The bigger the inertia means more force is required to make the object rotates </p>
+
+    </div>
+
+    <div class="scene-container">
+      <h2> Parallel Axis Theorem (平衡軸定理) </h2>
+      <p> 轉動慣量取決於物體繞哪個軸旋轉 </p>
+      <p> Moment of inertia depends on which axis the body rotates about </p>
+
+      <br> 
+      <p> 軸線距離中心越遠，轉動慣量越大 </p>
+      <p> The further away the axis from the center, the bigger the moment of inertia is </p>
+      <br>
+
+      <img width= 300px src = "https://www.sciencefacts.net/wp-content/uploads/2023/06/Parallel-Axis-Theorem.jpg">
+    </div>
+
+    <div class="scene-container">
+      <h2> Perpendicular Axis Theorem (垂直軸定理) </h2>
+      <p> z軸的轉動慣量可以透過x軸和y軸的轉動慣量總和得到。 </p>
+      <p> Moment of inertia of z axis can be obtained by the sum of moment of inertia in x axis and y axis </p>
+
+      <br> 
+      <p> 僅適用於二維平面，因為我們沒有考慮厚度。 </p>
+      <p> Only works in 2D plane because we didn't account for thickness  </p>
+      <br>
+
+      <img width= 300px src = "https://www.sciencefacts.net/wp-content/uploads/2023/06/Perpendicular-Axis-Theorem.jpg">
+    </div>
+
+    <div class="scene-container">
       <h2>Case 1: Disk(圓盤) rotating in central axis(Z axis) (I = 1/2MR²)</h2>
       <div class="system" id="scene"></div>
       <p>This cylinder rotates around its central axis. The moment of inertia is I = 1/2MR².</p>
@@ -97,6 +147,7 @@
       <div class="system" id="scene4"></div>
       <p>The solid cylinder can be separated to many small disk, we add all of them together as the integral</p>
     </div>
+
 
 
   <script>
